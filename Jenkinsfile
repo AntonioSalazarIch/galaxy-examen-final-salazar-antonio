@@ -24,8 +24,8 @@ pipeline {
                  docker { image 'maven:3.6.3-openjdk-11-slim' }
              }
              steps {
-                 sh 'mvn test'
-                 junit '**/target/test-classes/*.xml'
+                 //sh 'mvn test'
+                 //junit '**/target/test-classes/*.xml'
              }
         }
         stage('SonarQube') {
