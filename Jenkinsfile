@@ -15,7 +15,7 @@ pipeline {
             }
             steps {
                 sh 'mvn clean install'
-                archiveArtifacts artifacts: 'target/labmaven-0.0.1-SNAPSHOT.jar', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
             }
         }
 
@@ -28,24 +28,24 @@ pipeline {
                  //junit '**/target/test-classes/*.xml'
          //    }
        // }
-        stage('SonarQube') {
-             steps {
-                 script {
-                     def scannerHome = tool 'scanner-default'
-                     withSonarQubeEnv('sonar-server') {
-                         sh "${scannerHome}/bin/sonar-scanner \
-                             -Dsonar.projectKey=lab-maven \
-                             -Dsonar.projectName=lab-maven \
-                             -Dsonar.sources=src/main/java \
-                             -Dsonar.java.binaries=target/classes \
-                             -Dsonar.tests=src/test/java"
-                     }
-                 }
-            }
-         }
+        // stage('SonarQube') {
+        //      steps {
+        //          script {
+        //              def scannerHome = tool 'scanner-default'
+        //              withSonarQubeEnv('sonar-server') {
+        //                  sh "${scannerHome}/bin/sonar-scanner \
+        //                      -Dsonar.projectKey=lab-maven \
+        //                      -Dsonar.projectName=lab-maven \
+        //                      -Dsonar.sources=src/main/java \
+        //                      -Dsonar.java.binaries=target/classes \
+        //                      -Dsonar.tests=src/test/java"
+        //              }
+        //          }
+        //     }
+        //  }
         stage('Build Image') {
             steps {
-                copyArtifacts filter: 'target/labmaven-0.0.1-SNAPSHOT.jar',
+                copyArtifacts filter: 'target/*.jar',
                               fingerprintArtifacts: true,
                               projectName: '${JOB_NAME}',
                               flatten: true,
