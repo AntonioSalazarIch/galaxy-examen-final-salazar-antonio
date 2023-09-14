@@ -60,7 +60,7 @@ pipeline {
             steps {
                 script {
                         sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
-                        sh 'docker tag labmaven ${DOCKER_CREDS_USR}/labmaven:$BUILD_NUMBER'
+                        sh 'docker tag microservice ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
                         sh 'docker push ${DOCKER_CREDS_USR}/labmaven:$BUILD_NUMBER'
                         sh 'docker logout'
                     }
@@ -71,7 +71,7 @@ pipeline {
                 script {
                     sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
                     sh 'docker rm galaxyLabMaven -f'
-                    sh 'docker run -d -p 8081:8080 --name galaxyLabMaven ${DOCKER_CREDS_USR}/labmaven:$BUILD_NUMBER'
+                    sh 'docker run -d -p 8081:8080 --name galaxyLabMaven ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
                     sh 'docker logout'
                 }
             }
