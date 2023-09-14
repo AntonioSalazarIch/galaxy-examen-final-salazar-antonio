@@ -19,30 +19,30 @@ pipeline {
             }
         }
 
-        //stage('Test') {
-       //      agent {
-        //         docker { image 'maven:3.6.3-openjdk-11-slim' }
-        //     }
-       //      steps {
-                 //sh 'mvn test'
-                 //junit '**/target/test-classes/*.xml'
-         //    }
-       // }
-        // stage('SonarQube') {
-        //      steps {
-        //          script {
-        //              def scannerHome = tool 'scanner-default'
-        //              withSonarQubeEnv('sonar-server') {
-        //                  sh "${scannerHome}/bin/sonar-scanner \
-        //                      -Dsonar.projectKey=lab-maven \
-        //                      -Dsonar.projectName=lab-maven \
-        //                      -Dsonar.sources=src/main/java \
-        //                      -Dsonar.java.binaries=target/classes \
-        //                      -Dsonar.tests=src/test/java"
-        //              }
-        //          }
-        //     }
-        //  }
+        stage('Test') {
+            agent {
+                docker { image 'maven:3.6.3-openjdk-11-slim' }
+            }
+            steps {
+                 sh 'mvn test'
+                 junit '**/target/test-classes/*.xml'
+            }
+       }
+        stage('SonarQube') {
+             steps {
+                 script {
+                     def scannerHome = tool 'scanner-default'
+                     withSonarQubeEnv('sonar-server') {
+                         sh "${scannerHome}/bin/sonar-scanner \
+                             -Dsonar.projectKey=lab-maven \
+                             -Dsonar.projectName=lab-maven \
+                             -Dsonar.sources=src/main/java \
+                             -Dsonar.java.binaries=target/classes \
+                             -Dsonar.tests=src/test/java"
+                     }
+                 }
+            }
+         }
         stage('Build Image') {
             steps {
                 copyArtifacts filter: 'target/*.jar',
@@ -61,7 +61,7 @@ pipeline {
                 script {
                         sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
                         sh 'docker tag microservice ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
-                        sh 'docker push ${DOCKER_CREDS_USR}/labmaven:$BUILD_NUMBER'
+                        sh 'docker push ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
                         sh 'docker logout'
                     }
             }
