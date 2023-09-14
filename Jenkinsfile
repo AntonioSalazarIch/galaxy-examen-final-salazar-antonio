@@ -15,7 +15,7 @@ pipeline {
             }
             steps {
                 sh 'mvn clean install'
-                archiveArtifacts artifacts: 'target/labmaven.jar', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'target/labmaven-0.0.1-SNAPSHOT.jar', allowEmptyArchive: true
             }
         }
 
@@ -45,7 +45,7 @@ pipeline {
          }
         stage('Build Image') {
             steps {
-                copyArtifacts filter: 'target/labmaven.jar',
+                copyArtifacts filter: 'target/labmaven-0.0.1-SNAPSHOT.jar',
                               fingerprintArtifacts: true,
                               projectName: '${JOB_NAME}',
                               flatten: true,
