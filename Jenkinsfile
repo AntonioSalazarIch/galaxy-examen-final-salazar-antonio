@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDS = credentials('docker-credential')
+        DOCKER_CREDS = credentials('docker-credentials')
     }
     stages {
         stage('Checkout') {
@@ -24,8 +24,8 @@ pipeline {
                      def scannerHome = tool 'scanner-default'
                      withSonarQubeEnv('sonar-server') {
                          sh "${scannerHome}/bin/sonar-scanner \
-                             -Dsonar.projectKey=lab-maven \
-                             -Dsonar.projectName=lab-maven \
+                             -Dsonar.projectKey=labmaven02 \
+                             -Dsonar.projectName=labmaven02 \
                              -Dsonar.sources=src/main/java \
                              -Dsonar.java.binaries=target/classes \
                              -Dsonar.tests=src/test/java"
@@ -50,8 +50,8 @@ pipeline {
             steps {
                 script {
                         sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
-                        sh 'docker tag microservice ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
-                        sh 'docker push ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
+                        sh 'docker tag labmaven02 ${DOCKER_CREDS_USR}/labmaven02:$BUILD_NUMBER'
+                        sh 'docker push ${DOCKER_CREDS_USR}/labmaven02:$BUILD_NUMBER'
                         sh 'docker logout'
                     }
             }
@@ -61,7 +61,7 @@ pipeline {
                 script {
                     sh 'docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}'
                     sh 'docker rm galaxyLabMaven -f'
-                    sh 'docker run -d -p 8081:8080 --name galaxyLabMaven ${DOCKER_CREDS_USR}/microservice:$BUILD_NUMBER'
+                    sh 'docker run -d -p 8081:8080 --name galaxyLabMaven ${DOCKER_CREDS_USR}/labmaven02:$BUILD_NUMBER'
                     sh 'docker logout'
                 }
             }
