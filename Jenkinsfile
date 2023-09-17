@@ -15,7 +15,7 @@ pipeline {
             }
             post{
                 success {
-                    archiveArtifacts artifacts: 'target/labmaven-*.jar', fingerprint: true, onlyIfSuccessful: true
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, onlyIfSuccessful: true
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
             }
             stage('Build Image') {
                 steps {
-                    copyArtifacts filter: 'target/labmaven-*.jar',
+                    copyArtifacts filter: 'target/*.jar',
                                     fingerprintArtifacts: true,
                                     projectName: '${JOB_NAME}',
                                     flatten: true,
