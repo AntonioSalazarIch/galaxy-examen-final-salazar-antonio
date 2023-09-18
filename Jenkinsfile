@@ -4,6 +4,11 @@ pipeline {
         DOCKER_CREDS = credentials('docker-credentials')
         }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             agent {
                 docker { image 'maven:3.6.3-openjdk-11-slim' }
